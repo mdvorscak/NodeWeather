@@ -1,0 +1,6 @@
+{
+    "weatherService": {
+        "name": "forecast.io",
+        "APIKey": "Your key here"
+    }
+}
