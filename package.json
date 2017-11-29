@@ -1,0 +1,25 @@
+{
+  "name": "nodeweather",
+  "version": "1.0.0",
+  "description": "A small weather api wrapper",
+  "main": "weatherService.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mdvorscak/NodeWeather.git"
+  },
+  "keywords": [
+    "node",
+    "weather",
+    "service",
+    "cli"
+  ],
+  "author": "Mike Dvorscak",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mdvorscak/NodeWeather/issues"
+  },
+  "homepage": "https://github.com/mdvorscak/NodeWeather#readme"
+}
