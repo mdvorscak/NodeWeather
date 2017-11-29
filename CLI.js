@@ -1,8 +1,9 @@
-var locationService = require("./locationService");
-var weatherService = require("./weatherService");
-var config = require('./API_KEYS');
+const locationService = require("./locationService");
+const weatherService = require("./weatherService");
+const config = require('./API_KEYS');
 
-var location = process.argv.slice(2).join(" ");
-locationService.getLatLon(location, function latLonCallback(latLonObj){
-    weatherService.getCurrentWeather(config.weatherService.APIKey, latLonObj.lat, latLonObj.lng, function(){});
-});
+(async ()=>{
+    const location = process.argv.slice(2).join(" ");
+    const latLonObj = await locationService.getLatLon(location);
+    weatherService.getCurrentWeather(config.weatherService.APIKey, latLonObj.lat, latLonObj.lng);
+})();

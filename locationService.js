@@ -1,34 +1,37 @@
-var webService = require("./webService");
+const webService = require("./webService");
 
-function callWebservice(address, callback){
-    var locationURL = "https://maps.googleapis.com/maps/api/geocode/json?address=" + address;
-    webService.call(locationURL, callback);  
+function getWebserviceURL(address){
+    return "https://maps.googleapis.com/maps/api/geocode/json?address=" + address;
 }
 
-function getLocation(location, callback){
-    //Parse the location, then call the callback
-    function parseLocation(locObj){
-        //Use the first result from Google
-        if(locObj.status == "OK"){
-            callback(locObj.results[0]);
-        } else {
-            console.warn("Problem contacting the geolocation API: " + locObj.status);
-        }
+//Parse the location, then return the results
+function parseLocation(locObj){
+    //Use the first result from Google
+    if(locObj.status == "OK"){
+        return locObj.results[0];
+    } else {
+        console.warn("Problem contacting the geolocation API: " + locObj.status);
     }
-    
-    callWebservice(location, parseLocation);
 }
 
-function getLatLon(location, callback){
-    function parseLatLon(locObj){
-        if(locObj.status == "OK"){
-            callback(locObj.results[0].geometry.location);
-        } else {
-            console.warn("Problem contacting the geolocation API: " + locObj.status);
-        }
+async function getLocation(location){
+    var url = getWebserviceURL(location);
+    var results = await webService.call(url);
+    return parseLocation(results);
+}
+
+function parseLatLon(locObj){
+    if(locObj.status == "OK"){
+        return locObj.results[0].geometry.location;
+    } else {
+        console.warn("Problem contacting the geolocation API: " + locObj.status);
     }
-    
-    callWebservice(location, parseLatLon);
+}
+
+async function getLatLon(location){
+    var url = getWebserviceURL(location);
+    var results = await webService.call(url);
+    return parseLatLon(results);
 }
 
 module.exports.getLocation = getLocation;

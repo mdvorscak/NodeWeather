@@ -1,31 +1,9 @@
-var https = require("https");
+const req = require('requisition');
 
-function printError(error){
-    console.error(error.message);
-}
-
-function call(url, callback){
-     https.get(url, function responseCallback(response){
-        var data = "";
-        //Read data
-        response.on("data", function dataChunkHandler(chunk){
-            data += chunk;
-        }).on("end", function endOfDataHandler(){
-            if(response.statusCode){
-                try {
-                    var dataObj = JSON.parse(data);
-                    callback(dataObj);
-                } catch (error){
-                    printError(error);
-                }
-            } else{
-                var errorMsg = "There was an error getting contacting the Webservice at " + url + ". (" + http.STATUS_CODES[response.statusCode] + ")";
-                printError({message: errorMsg});
-            }
-        });
-        
-        
-    }).on("error", printError);
+async function call(url){
+    var response = await req(url);
+    var body = await response.json();
+    return body;
 }
 
 module.exports.call = call;

@@ -1,17 +1,18 @@
-var webService = require("./webService");
+const webService = require("./webService");
 
-function callWebservice(APIKey, lat, lon, callback){
-    var forecastURL = "https://api.forecast.io/forecast/" + APIKey + "/" + lat + "," + lon;
-    webService.call(forecastURL, callback);  
+function getForecastURL(APIKey, lat, lon){
+    return "https://api.forecast.io/forecast/" + APIKey + "/" + lat + "," + lon;
 }
 
-function getCurrentWeather(APIKey, lat, lon, callback){
-    //Parse the location, then call the callback
-    function parseWeather(weatherObj){
-        console.dir(weatherObj.currently);
-    }
-    
-    callWebservice(APIKey, lat, lon, parseWeather);
+function display(weatherObj){
+    console.dir(weatherObj.currently);
+}
+
+async function getCurrentWeather(APIKey, lat, lon){
+    var forecastURL = getForecastURL(APIKey, lat, lon);
+    var weatherObj = await webService.call(forecastURL);
+    display(weatherObj);
+    return weatherObj;
 }
 
 module.exports.getCurrentWeather = getCurrentWeather;

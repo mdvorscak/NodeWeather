@@ -21,5 +21,8 @@
   "bugs": {
     "url": "https://github.com/mdvorscak/NodeWeather/issues"
   },
-  "homepage": "https://github.com/mdvorscak/NodeWeather#readme"
+  "homepage": "https://github.com/mdvorscak/NodeWeather#readme",
+  "dependencies": {
+    "requisition": "^1.7.0"
+  }
 }
