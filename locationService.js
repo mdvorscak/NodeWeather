@@ -14,15 +14,31 @@ function parseLocation(locObj){
     }
 }
 
-async function getLocation(location){
-    var url = getWebserviceURL(location);
-    var results = await webService.call(url);
-    return parseLocation(results);
+function formatIPAddress(location){
+    return `${location.city}, ${location.region_code} ${location.zip_code}, ${location.country_code}`;
 }
 
-function parseLatLon(locObj){
+async function getCurrentLocation(){
+    const {promisify} = require('util'); 
+    const getIP = promisify(require('external-ip')()); 
+    const iplocation = require('iplocation');    
+    
+    var location;
+    try{
+        var ip = await getIP();
+        location = await iplocation(ip);
+        location.formatted = formatIPAddress(location);
+    } catch(e) {
+        location = {};
+    }
+    return location;
+}
+
+function parseGoogleResults(locObj){
     if(locObj.status == "OK"){
-        return locObj.results[0].geometry.location;
+        var firstResult = locObj.results[0];
+        var latLon = firstResult.geometry.location;
+        return { latitude : latLon.lat, longitude: latLon.lng, formatted: firstResult.formatted_address};
     } else {
         console.warn("Problem contacting the geolocation API: " + locObj.status);
     }
@@ -31,8 +47,10 @@ function parseLatLon(locObj){
 async function getLatLon(location){
     var url = getWebserviceURL(location);
     var results = await webService.call(url);
-    return parseLatLon(results);
+    return parseGoogleResults(results);
 }
 
-module.exports.getLocation = getLocation;
-module.exports.getLatLon = getLatLon;
+module.exports = {
+    getCurrentLocation: getCurrentLocation,
+    getLatLon: getLatLon
+};
