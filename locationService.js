@@ -19,14 +19,11 @@ function formatIPAddress(location){
 }
 
 async function getCurrentLocation(){
-    const {promisify} = require('util'); 
-    const getIP = promisify(require('external-ip')()); 
     const iplocation = require('iplocation');    
     
     var location;
     try{
-        var ip = await getIP();
-        location = await iplocation(ip);
+        location = await iplocation();
         location.formatted = formatIPAddress(location);
     } catch(e) {
         location = {};
